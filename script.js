@@ -26,20 +26,75 @@ const moviesArr = [
     }
 ];
 
-const moviesList = moviesArr.map(movie =>
-    React.createElement(
-        "li",
-        { key: movie.id },
-        React.createElement("h2", {}, movie.title),
-        React.createElement("p", {}, movie.desc),
-        React.createElement("img", { src: movie.poster, style: { width: "200px" } })
-    )
-);
+const MoviePoster = React.createClass({
+    render: function() {
+        return React.createElement("img", { src: this.props.poster, style: { width: "200px" } });
+    },
+
+    propTypes: {
+        poster: React.PropTypes.string.isRequired
+    }
+});
+
+const MovieTitle = React.createClass({
+    render: function() {
+        return React.createElement("h3", {}, this.props.title);
+    },
+
+    propTypes: {
+        title: React.PropTypes.string.isRequired
+    }
+});
+
+const MovieDescription = React.createClass({
+    render: function() {
+        return React.createElement("p", {}, this.props.desc);
+    },
+
+    propTypes: {
+        desc: React.PropTypes.string.isRequired
+    }
+});
+
+const Movie = React.createClass({
+    render: function() {
+        return React.createElement(
+            "li",
+            {},
+            React.createElement(MovieTitle, { title: this.props.title }),
+            React.createElement(MovieDescription, { desc: this.props.desc }),
+            React.createElement(MoviePoster, { poster: this.props.poster })
+        );
+    },
+
+    propTypes: {
+        title: React.PropTypes.string.isRequired,
+        desc: React.PropTypes.string.isRequired,
+        poster: React.PropTypes.string.isRequired
+    }
+});
+
+const MoviesList = React.createClass({
+    render: function() {
+        return React.createElement(
+            "ul",
+            {},
+            this.props.moviesArr.map(({ id, title, desc, poster }) =>
+                React.createElement(Movie, { key: id, title, desc, poster })
+            )
+        );
+    },
+
+    propTypes: {
+        moviesArr: React.PropTypes.array.isRequired
+    }
+});
 
 const container = React.createElement(
     "div",
     {},
     React.createElement("h1", {}, "Lista filmów"),
-    React.createElement("ul", {}, moviesList)
+    React.createElement(MoviesList, { moviesArr })
 );
+
 ReactDOM.render(container, document.getElementById("app"));
